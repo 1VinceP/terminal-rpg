@@ -2,6 +2,7 @@
 import GameState from './GameState.js';
 import titleScreen from './components/titleScreen.js';
 import welcome from './components/welcome.js';
+import loadScene from './actions/loadScene.js';
 
 /* setup game */
 GameState.load();
@@ -12,5 +13,6 @@ if (!GameState.created) {
 await titleScreen();
 
 if (!GameState.player) await welcome();
+else console.clear();
 
-await loadScene();
+await loadScene(GameState.player.location);

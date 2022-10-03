@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 import GameState from '../GameState.js';
 import Player from '../data/classes/Player.js';
+import gradient from 'gradient-string';
 
 export default async function welcome() {
    const hobbyChoices = ['Pilot vehicles', 'Study biology', 'Play sports', 'Write stories'];
@@ -40,5 +41,13 @@ export default async function welcome() {
    player.report();
 
    GameState.setPlayer(player);
+   GameState.player.setLocation(['Dega III', 'Dega Resort', 'poolside'], 'start');
    GameState.save();
+
+   console.log(gradient.cristal(`${name} arrives on the planet Dega III.`));
+   await inquirer.prompt([{
+      name: 'dialogue',
+      message: `With your All Access resort pass in hand, you step off of the transport ship and head directly to the poolside lounge. You've heard nothing but great things about this place and you're excited to finally get the R&R that you deserve.
+   Press Enter to continue...`,
+   }]);
 }
