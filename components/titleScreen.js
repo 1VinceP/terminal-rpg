@@ -3,7 +3,7 @@ import gradient from 'gradient-string';
 import inquirer from 'inquirer';
 import GameState from '../GameState.js';
 import sleep from '../utils/sleep.js';
-import help from './help.js';
+import help from './commands/help.js';
 
 export default async function titleScreen() {
    let showTitle = true;
@@ -21,11 +21,13 @@ export default async function titleScreen() {
          ...(GameState.player ? ['Continue'] : []),
          'Help',
       ];
+
       const answers = await inquirer.prompt([{
          name: 'start',
          type: 'rawlist',
          message: 'Select an option to continue',
          choices: startChoices,
+         interruptedKeyName: 'a',
       }]);
       const { start } = answers;
 
