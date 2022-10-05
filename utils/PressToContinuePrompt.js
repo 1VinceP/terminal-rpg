@@ -10,6 +10,7 @@ class PressToContinuePrompt extends InputPromptBase {
    constructor(questions, rl, answers) {
       super(questions, rl, answers);
 
+      /* ensure a key is set to forward the prompt */
       if ([
          this.opt.anyKey !== undefined,
          this.opt.enter !== undefined,
