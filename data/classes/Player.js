@@ -6,7 +6,7 @@ export default class Player {
       this.name = name;
       this.health = 2;
       this.stress = 2;
-      this.location = [];
+      this.location = {};
       this.bag = [];
       this.equipped = {
          head: null,
@@ -88,5 +88,9 @@ export default class Player {
          console.log(chalk.cyan(`[${key}]`), val);
       });
       console.log('\n');
+   }
+
+   setLocation(path, time) {
+      this.location = { path, time };
    }
 }
