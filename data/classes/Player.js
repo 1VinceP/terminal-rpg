@@ -1,12 +1,13 @@
 import chalk from 'chalk';
 import _ from 'lodash';
+import Item from './Item.js';
 
 export default class Player {
    constructor(name) {
       this.name = name;
       this.health = 2;
       this.stress = 2;
-      this.location = {};
+      this.location = { name: '', time: '' };
       this.bag = [];
       this.equipped = {
          head: null,
@@ -39,13 +40,18 @@ export default class Player {
       this.licenses = [];
       this.species = null;
       this.career = null;
-      this.hobbies = null;
+      this.hobbies = [];
+      this.money = 0;
    }
 
    create({ species, career, hobbies }) {
+      this.money = 100;
       this.species = species;
       this.career = career;
       this.hobbies = Object.values(hobbies);
+      this.bag.unshift(
+         new Item('Dega Resort All Access Pass', 'This gives you unlimited access to the Dega Resort on Dega III for one week. All amenities are included.', 5000000),
+      );
 
       /* set species stats */
       if (species === 'Human') Object.keys(this.stats).forEach(stat => ++this.stats[stat]);
@@ -90,7 +96,7 @@ export default class Player {
       console.log('\n');
    }
 
-   setLocation(path, time) {
-      this.location = { path, time };
+   setLocation(name, time) {
+      this.location = { name, time };
    }
 }

@@ -5,6 +5,7 @@
 
 import InputPromptBase from 'inquirer/lib/prompts/base.js';
 import observe from 'inquirer/lib/utils/events.js';
+import chalk from 'chalk';
 
 class PressToContinuePrompt extends InputPromptBase {
    constructor(questions, rl, answers) {
@@ -49,7 +50,7 @@ class PressToContinuePrompt extends InputPromptBase {
       const key = this.opt.enter ? 'Enter'
          : this.opt.key ? this.opt.key
          : 'any key';
-      console.log(`${this.opt.message}\nPress ${key} to continue...`);
+      console.log(this.opt.message, chalk.magenta(`\nPress ${key} to continue...`));
    }
 }
 
