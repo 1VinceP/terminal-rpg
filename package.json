@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "play": "node --experimental-json-modules index.js"
+    "game": "node --experimental-json-modules index.js"
   },
   "keywords": [],
   "author": "",

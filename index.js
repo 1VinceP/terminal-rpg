@@ -2,12 +2,19 @@
 import inquirer from 'inquirer';
 import inquirerRawListPrompt from 'inquirer/lib/prompts/rawlist.js';
 import SearchListPrompt from 'inquirer-search-list';
+import _ from 'lodash';
 import PromptCommands from './utils/PromptCommands.js';
 import GameState from './GameState.js';
 import titleScreen from './components/titleScreen.js';
 import welcome from './components/welcome.js';
 import loadScene from './actions/loadScene.js';
 import PressToContinuePrompt from "./utils/PressToContinuePrompt.js";
+
+import locations from './data/locations/index.js';
+import routes, { createRoutes } from './data/routes.js';
+
+/* generate location routes */
+createRoutes(locations);
 
 inquirer.registerPrompt('rawlist', PromptCommands.from(inquirerRawListPrompt));
 inquirer.registerPrompt('continue', PromptCommands.from(PressToContinuePrompt));
