@@ -30,6 +30,13 @@ const choices = {
          'Join the volleyball game',
       ],
    },
+   'poolside lounge': {
+      start: [
+         'Bet on races',
+         'Play a game',
+      ],
+      betting: ['Cheery', 'Bruiser', 'Spice', 'Carrot'],
+   },
 };
 
 const messages = {
@@ -145,6 +152,94 @@ const locations = {
                   console.log('\nAfter enjoying your time in the pool you get out and dry off.');
                   loadScene({ name: 'resort poolside', time });
                },
+            },
+
+            'poolside lounge': {
+               async enter(time) {
+                  const { creature, amount, game } = await inquirer.prompt([
+                     {
+                        name: 'approach',
+                        type: 'continue',
+                        enter: true,
+                        message: '\nThe low din of conversation greets you as you enter the lounge. A few small groups of people huddle together on the couches, largely ignorant of your entrance.',
+                     },
+                     {
+                        name: 'activities',
+                        type: 'rawlist',
+                        message: 'Some people are betting and cheering on a race between exotic creatures. Another group of people appear to be in a heated competition over what you recognize as a typically casual board game.',
+                        choices: choices['poolside lounge'][time],
+                     },
+                        {
+                           name: 'creature',
+                           when: ({ activities }) => activities.includes('Bet'),
+                           type: 'rawlist',
+                           message: 'You walk towards the crowd of people enthusiastically cheering for the race and a man immediately approaches, asking for your wager. On which creature',
+                           choices: choices['poolside lounge']['betting'],
+                        },
+                        {
+                           name: 'amount',
+                           type: 'number',
+                           when: ({ activities }) => activities.includes('Bet'),
+                           message: 'How much would you like to bet?',
+                        },
+                        {
+                           name: 'dialogue',
+                           type: 'continue',
+                           enter: true,
+                           when: ({ activities }) => activities.includes('Bet'),
+                           message: '\n"Excellent choice, we\'re happy to have you playing with us!" The man cheerfully scribbles your bet in a small notebook that he carries. You turn towards the race and watch with anticipation.',
+                        },
+                     {
+                        name: 'game',
+                        type: 'rawlist',
+                        when: ({ activities }) => activities.includes('game'),
+                        message: '\nYou sit down at an open table and are quickly joined by another person. "Ever played before?" he asks. Without waiting for an answer the deck of cards is shuffled and dealt. Looking at your hand, you see that you have a risky card that could potentially result in a major win right now, and you have a set of cards that all but guarantee a smaller win in a few turns.',
+                        choices: ['Risk winning it big now', 'Accept the guaranteed win later'],
+                     },
+                        {
+                           name: 'risk',
+                           type: 'continue',
+                           enter: true,
+                           when: ({ game }) => game && game.includes('big'),
+                           message: '\nYou take the risk and go all in...',
+                        },
+                        {
+                           name: 'guaranteed',
+                           type: 'continue',
+                           enter: true,
+                           when: ({ game }) => game && game.includes('guaranteed'),
+                           message: '\nYou bide your time and react to the other player\'s actions before surprising him with high value card that he would\'ve expected you to player earlier. You take a small portion of the winning pot and pocket $10.',
+                        },
+                  ]);
+
+                  if (creature) {
+                     console.log(`\nThe race takes longer than you expected and ${creature} takes and loses the lead many times.`);
+                     const chance = Math.random() * 4;
+                     if (chance >= 3) {
+                        console.log(`\nIt was a photo finish! If not for the high-def cameras it would have been impossible to confirm that ${creature} won the race. You receive ${amount} credits.`);
+                        GameState.player.money += amount;
+                     } else {
+                        console.log(`\nDespite a harrowing race, ${creature} slowly fell behind the leaders and was not able to place in the top 3 winner positions. You hand over ${amount}. "Haha well maybe you'll have better luck next time! We hope to see you again."`);
+                        GameState.player.money -= amount;
+                     }
+                  }
+
+                  if (game && game.includes('guaranteed')) {
+                     GameState.player.money += 10;
+                  } else if (game && game.includes('big')) {
+                     const chance = Math.random() * 10;
+                     if (chance >= 6) {
+                        console.log('\nYou won $20!');
+                        GameState.player.money += 20;
+                     } else {
+                        console.log('\nYou lost $15. Better luck next time');
+                        GameState.player.money -= 15;
+                     }
+                  }
+
+                  console.log('\nAfter a few hours in the lounge you return outside to the pool.');
+                  loadScene({ name: 'resort poolside', time });
+               }
             },
          },
       },
